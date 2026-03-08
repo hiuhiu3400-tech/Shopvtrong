@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Admin Panel - KWC</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">ADMIN PANEL</div>
+        <a href="index.html" style="color:var(--neon-cyan); text-decoration:none;">Quay lại Shop</a>
+    </nav>
+
+    <div class="admin-container">
+        <h2 style="color: var(--neon-pink);">ĐĂNG ACC MỚI</h2>
+        <form id="accForm">
+            <input type="text" id="id" placeholder="Mã số Acc (VD: 8888)" required>
+            <input type="text" id="rank" placeholder="Xếp hạng (VD: Thách Đấu)" required>
+            <input type="text" id="skin" placeholder="Skin nổi bật (VD: AK Rồng Xanh)" required>
+            <input type="number" id="price" placeholder="Giá bán (VNĐ)" required>
+            <input type="text" id="image" placeholder="Link ảnh Acc (Link Imgur/Facebook)">
+            <button type="submit" class="btn-buy" style="border-color: var(--neon-pink); color: var(--neon-pink); margin-top:10px;">ĐĂNG BÁN</button>
+        </form>
+
+        <hr style="margin: 40px 0; border: 0.5px solid #333;">
+
+        <h2 style="color: var(--neon-cyan);">DANH SÁCH ĐÃ ĐĂNG</h2>
+        <div id="admin-list"></div>
+    </div>
+
+    <script>
+        const form = document.getElementById('accForm');
+
+        form.onsubmit = (e) => {
+            e.preventDefault();
+            const newAcc = {
+                id: document.getElementById('id').value,
+                rank: document.getElementById('rank').value,
+                skin: document.getElementById('skin').value,
+                price: document.getElementById('price').value,
+                image: document.getElementById('image').value || 'https://i.imgur.com/vHpx5yS.jpg'
+            };
+
+            let data = JSON.parse(localStorage.getItem('kwc_data')) || [];
+            data.push(newAcc);
+            localStorage.setItem('kwc_data', JSON.stringify(data));
+            
+            alert('Thành công! Hãy quay lại trang chủ để kiểm tra.');
+            form.reset();
+            renderAdminList();
+        };
+
+        function deleteAcc(index) {
+            let data = JSON.parse(localStorage.getItem('kwc_data'));
+            data.splice(index, 1);
+            localStorage.setItem('kwc_data', JSON.stringify(data));
+            renderAdminList();
+        }
+
+        function renderAdminList() {
+            const data = JSON.parse(localStorage.getItem('kwc_data')) || [];
+            const list = document.getElementById('admin-list');
+            list.innerHTML = data.map((acc, index) => `
+                <div style="background:#111; padding:15px; margin-bottom:10px; border-radius:10px; display:flex; justify-content:space-between; align-items:center; border-left: 4px solid var(--neon-cyan);">
+                    <div>
+                        <b>#${acc.id}</b> - ${Number(acc.price).toLocaleString()}đ
+                    </div>
+                    <button onclick="deleteAcc(${index})" style="background:red; color:white; border:none; padding:5px 10px; border-radius:5px; cursor:pointer;">Xóa</button>
+                </div>
+            `).join('');
+        }
+        renderAdminList();
+    </script>
+</body>
+</html>

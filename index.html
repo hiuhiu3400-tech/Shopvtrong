@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>KWC STORE - NEON GAMING</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <nav>
+        <div class="logo">KWC SHOP</div>
+        <div>
+            <a href="admin.html" style="color:var(--neon-pink); text-decoration:none; font-weight:bold;">QUẢN TRỊ VIÊN</a>
+        </div>
+    </nav>
+
+    <div style="text-align: center; padding: 50px 0;">
+        <h1 style="text-shadow: 0 0 20px var(--neon-pink); font-size: 40px;">HỆ THỐNG BÁN ACC FREE FIRE</h1>
+        <p style="color: #888;">Uy tín tạo nên thương hiệu - Giao dịch tự động</p>
+    </div>
+
+    <div id="shop-items" class="grid">
+        </div>
+
+    <script>
+        function displayAccounts() {
+            // Lấy dữ liệu từ localStorage
+            const accounts = JSON.parse(localStorage.getItem('kwc_data')) || [];
+            const container = document.getElementById('shop-items');
+            
+            if (accounts.length === 0) {
+                container.innerHTML = `<h2 style="grid-column: 1/-1; text-align:center; opacity:0.5;">Đang cập nhật thêm tài khoản...</h2>`;
+                return;
+            }
+
+            container.innerHTML = accounts.map(acc => `
+                <div class="acc-card">
+                    <img src="${acc.image}" onerror="this.src='https://i.imgur.com/vHpx5yS.jpg'">
+                    <div class="card-info">
+                        <span class="rank-badge">${acc.rank}</span>
+                        <h3 style="margin:10px 0;">Mã số: #${acc.id}</h3>
+                        <p style="font-size:14px; color:#aaa;">Súng: ${acc.skin}</p>
+                        <div class="price-tag">${Number(acc.price).toLocaleString()}đ</div>
+                        <button class="btn-buy">MUA NGAY</button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Gọi hàm hiển thị ngay khi trang load
+        window.onload = displayAccounts;
+    </script>
+</body>
+</html>
